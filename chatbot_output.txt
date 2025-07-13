@@ -1,0 +1,13 @@
+Question: does good credit history help?
+Answer: It's not. The credit history of the borrower is clearly the best of the borrower's resources. Noting the need for credit in such households is
+
+Question: does good credit history help ?
+Answer: Yes, good credit history significantly increases loan approval chances (approval rate: 55.56% in similar profiles). Credit_History is the most important factor (35.64 importance), followed by LoanAmount_to_Income (9.50) and Dependents (8.25). Model accuracy: 82.71%.
+
+Question: does good credit history help ?
+Answer: Yes, good credit history significantly increases loan approval chances (approval rate: 78.95% in similar profiles). Credit_History is the most important factor (35.64 importance), followed by LoanAmount_to_Income (9.50) and Dependents (8.25). Model accuracy: 82.71%.
+
+Question: Gender: Female, Married: No, Dependents: 0, Education: Graduate, Self_Employed: Yes, ApplicantIncome: 3000, CoapplicantIncome: 0, LoanAmount: 100, Loan_Amount_Term: 360, Credit_History: Good, Property_Area: Semiurban. will the loan be approved ?
+Answer: Loan Prediction: Approved (Y)
+Model accuracy: 82.71% (cross-validation).
+
