@@ -11,15 +11,16 @@ import re
 import logging
 
 # Setup logging
-logging.basicConfig(level=logging.INFO, filename="E:\\CSI_CB\\chatbot_log.txt", 
+logging.basicConfig(level=logging.INFO, filename="chatbot_log.txt", 
                     format="%(asctime)s - %(levelname)s - %(message)s")
 
-# File paths
-train_path = "E:\\CSI_CB\\processed\\train_processed.csv"
-index_path = "E:\\CSI_CB\\faiss_index\\dataset_index.faiss"
-output_path = "E:\\CSI_CB\\chatbot_output.txt"
-model_path = "E:\\CSI_CB\\best_model.pkl"
-embeddings_path = "E:\\CSI_CB\\embeddings.npy"
+# File paths (relative to repository root)
+train_path = "processed/train_processed.csv"
+index_path = "faiss_index/dataset_index.faiss"
+output_path = "chatbot_output.txt"
+model_path = "best_model.pkl"
+embeddings_path = "embeddings.npy"
+feature_image_path = "feature_importance.png"
 
 # Set device and suppress warnings
 os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "true"
@@ -223,7 +224,7 @@ if prompt:
 
 # Display feature importance plot
 try:
-    st.image("E:\\CSI_CB\\feature_importance.png", caption="Feature Importance")
+    st.image(feature_image_path, caption="Feature Importance")
 except Exception as e:
     st.warning(f"Could not load feature importance plot: {e}")
     logging.error(f"Error loading feature importance plot: {e}")
