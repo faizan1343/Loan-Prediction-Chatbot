@@ -1,0 +1,54 @@
+2025-07-13 10:23:51,005 - INFO - Using device: cuda
+2025-07-13 10:23:51,196 - INFO - CatBoost model loaded.
+2025-07-13 10:23:51,210 - INFO - Training data loaded.
+2025-07-13 10:23:51,211 - INFO - Load pretrained SentenceTransformer: multi-qa-mpnet-base-dot-v1
+2025-07-13 10:23:56,683 - INFO - Sentence transformer loaded.
+2025-07-13 10:23:59,205 - INFO - FAISS index and embeddings created and saved.
+2025-07-13 10:24:01,605 - INFO - Generative model and tokenizer loaded.
+2025-07-13 10:24:17,873 - INFO - Using device: cuda
+2025-07-13 10:24:17,893 - INFO - CatBoost model loaded.
+2025-07-13 10:24:17,901 - INFO - Training data loaded.
+2025-07-13 10:24:17,901 - INFO - Load pretrained SentenceTransformer: multi-qa-mpnet-base-dot-v1
+2025-07-13 10:24:24,668 - INFO - Sentence transformer loaded.
+2025-07-13 10:24:24,700 - INFO - Loaded existing FAISS index and embeddings.
+2025-07-13 10:24:26,549 - INFO - Generative model and tokenizer loaded.
+2025-07-13 10:24:26,771 - INFO - Input tokens for query 'does good credit history help?': 80
+2025-07-13 10:24:29,141 - INFO - Q&A response for 'does good credit history help?': It's not. The credit history of the borrower is clearly the best of the borrower's resources. Noting the need for credit in such households is
+2025-07-13 10:29:52,780 - INFO - Using device: cuda
+2025-07-13 10:29:53,052 - INFO - CatBoost model loaded.
+2025-07-13 10:29:53,061 - INFO - Training data loaded.
+2025-07-13 10:29:53,063 - INFO - Load pretrained SentenceTransformer: multi-qa-mpnet-base-dot-v1
+2025-07-13 10:29:58,261 - INFO - Sentence transformer loaded.
+2025-07-13 10:29:58,279 - INFO - Loaded existing FAISS index and embeddings.
+2025-07-13 10:30:12,273 - INFO - Using device: cuda
+2025-07-13 10:30:12,288 - INFO - CatBoost model loaded.
+2025-07-13 10:30:12,323 - INFO - Training data loaded.
+2025-07-13 10:30:12,330 - INFO - Load pretrained SentenceTransformer: multi-qa-mpnet-base-dot-v1
+2025-07-13 10:30:17,293 - INFO - Sentence transformer loaded.
+2025-07-13 10:30:17,297 - INFO - Loaded existing FAISS index and embeddings.
+2025-07-13 10:30:18,116 - INFO - Q&A response for 'does good credit history help ?': Yes, good credit history significantly increases loan approval chances (approval rate: 55.56% in similar profiles). Credit_History is the most important factor (35.64 importance), followed by LoanAmount_to_Income (9.50) and Dependents (8.25). Model accuracy: 82.71%.
+2025-07-13 10:33:14,365 - INFO - Using device: cuda
+2025-07-13 10:33:14,486 - INFO - CatBoost model loaded.
+2025-07-13 10:33:14,495 - INFO - Training data loaded.
+2025-07-13 10:33:14,497 - INFO - Dataset approval rate for Credit_History=1: 79.05%
+2025-07-13 10:33:14,498 - INFO - Load pretrained SentenceTransformer: multi-qa-mpnet-base-dot-v1
+2025-07-13 10:33:21,522 - INFO - Sentence transformer loaded.
+2025-07-13 10:33:21,534 - INFO - Loaded existing FAISS index and embeddings.
+2025-07-13 10:33:35,366 - INFO - Using device: cuda
+2025-07-13 10:33:35,372 - INFO - CatBoost model loaded.
+2025-07-13 10:33:35,377 - INFO - Training data loaded.
+2025-07-13 10:33:35,378 - INFO - Dataset approval rate for Credit_History=1: 79.05%
+2025-07-13 10:33:35,380 - INFO - Load pretrained SentenceTransformer: multi-qa-mpnet-base-dot-v1
+2025-07-13 10:33:39,990 - INFO - Sentence transformer loaded.
+2025-07-13 10:33:39,993 - INFO - Loaded existing FAISS index and embeddings.
+2025-07-13 10:33:40,609 - INFO - Query: does good credit history help ?, Approval rate: 78.95%, Retrieved profiles: 19
+2025-07-13 10:33:40,609 - INFO - Q&A response for 'does good credit history help ?': Yes, good credit history significantly increases loan approval chances (approval rate: 78.95% in similar profiles). Credit_History is the most important factor (35.64 importance), followed by LoanAmount_to_Income (9.50) and Dependents (8.25). Model accuracy: 82.71%.
+2025-07-13 10:35:06,937 - INFO - Using device: cuda
+2025-07-13 10:35:06,960 - INFO - CatBoost model loaded.
+2025-07-13 10:35:06,972 - INFO - Training data loaded.
+2025-07-13 10:35:06,976 - INFO - Dataset approval rate for Credit_History=1: 79.05%
+2025-07-13 10:35:06,982 - INFO - Load pretrained SentenceTransformer: multi-qa-mpnet-base-dot-v1
+2025-07-13 10:35:12,043 - INFO - Sentence transformer loaded.
+2025-07-13 10:35:12,050 - INFO - Loaded existing FAISS index and embeddings.
+2025-07-13 10:35:12,098 - INFO - Prediction made: Loan Prediction: Approved (Y)
+Model accuracy: 82.71% (cross-validation).
