@@ -1,0 +1,14 @@
+FROM E:\CSI_CB\fine_tuned_model.gguf
+
+PARAMETER temperature 0.7
+PARAMETER stop "<|END|>"
+PARAMETER stop "###"
+
+TEMPLATE """
+{{ .System }}
+{{ .Prompt }}
+"""
+
+SYSTEM """
+You are a helpful assistant answering loan-related questions concisely.
+"""
