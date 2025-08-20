@@ -13,7 +13,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler(r"E:\CSI_CB\logs\training.log"),
+        logging.FileHandler(os.path.join("logs", "training.log")),
         logging.StreamHandler()
     ]
 )
@@ -23,15 +23,14 @@ logger = logging.getLogger(__name__)
 # Config
 # -----------------------
 model_name = "meta-llama/Llama-3.2-1B-Instruct"
-data_path = r"E:\CSI_CB\loan_qa_dataset_llama.csv"
-output_dir = r"E:\CSI_CB\fine_tuned_model"
-merged_model_dir = r"E:\CSI_CB\final_merged_model"
-log_dir = r"E:\CSI_CB\logs"
+data_path = os.path.join("data", "loan_qa_dataset_llama.csv")
+output_dir = os.path.join("output", "fine_tuned_model")
+merged_model_dir = os.path.join("output", "final_merged_model")
+log_dir = os.path.join("logs")
 
 # Create directories
-os.makedirs(output_dir, exist_ok=True)
-os.makedirs(merged_model_dir, exist_ok=True)
-os.makedirs(log_dir, exist_ok=True)
+for dir_path in [output_dir, merged_model_dir, log_dir, os.path.dirname(data_path)]:
+    os.makedirs(dir_path, exist_ok=True)
 
 # -----------------------
 # Tokenizer
@@ -81,7 +80,6 @@ def tokenize_function(examples):
         truncation=True,
         max_length=512
     )
-    # Mask padding tokens in labels to avoid unnecessary loss computation and reduce memory
     input_ids = model_inputs["input_ids"]
     attention_mask = model_inputs.get("attention_mask")
     if attention_mask is not None:
@@ -167,7 +165,6 @@ logger.info(f"LoRA adapter and tokenizer saved at: {output_dir}")
 # -----------------------
 logger.info("Merging LoRA weights into base model...")
 try:
-    # Reload base model on CPU for merge
     logger.info("Loading base model on CPU...")
     base_model = AutoModelForCausalLM.from_pretrained(
         model_name,
@@ -175,15 +172,12 @@ try:
         device_map="cpu"
     )
 
-    # Load trained adapter
     logger.info("Loading LoRA adapters...")
     model_with_lora = PeftModel.from_pretrained(base_model, output_dir)
 
-    # Merge weights
     logger.info("Merging weights...")
     merged_model = model_with_lora.merge_and_unload()
 
-    # Save merged model
     logger.info("Saving merged model...")
     merged_model.save_pretrained(merged_model_dir, safe_serialization=True)
     tokenizer.save_pretrained(merged_model_dir)
@@ -191,4 +185,3 @@ try:
 except Exception as e:
     logger.error(f"Error during merging: {e}")
     raise
-

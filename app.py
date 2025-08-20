@@ -1,8 +1,9 @@
 import streamlit as st
 import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM
+from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
+import os
 
-MODEL_DIR = r"E:\CSI_CB\final_merged_model"
+MODEL_DIR = os.path.join("output", "final_merged_model")
 
 st.set_page_config(
     page_title="AI Loan Chatbot",
@@ -15,7 +16,6 @@ st.markdown(
     """
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap');
-
     html, body, [class^="block-container"], .main {
         background: radial-gradient(1200px 600px at 20% 0%, rgba(0,255,255,0.06), transparent 40%),
                     radial-gradient(1000px 600px at 100% 20%, rgba(255,0,200,0.06), transparent 40%),
@@ -23,11 +23,7 @@ st.markdown(
         color: #E2F1FF;
         font-family: 'Share Tech Mono', monospace;
     }
-
-    /* Hide default header */
     header, .stDeployButton {visibility: hidden; height: 0;}
-
-    /* Neon title */
     .neon-title {
         font-family: 'Orbitron', sans-serif;
         font-size: 44px;
@@ -42,8 +38,6 @@ st.markdown(
         opacity: 0.8;
         margin-bottom: 20px;
     }
-
-    /* Glass panels */
     .glass {
         background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
         border: 1px solid rgba(0,229,255,0.25);
@@ -51,8 +45,6 @@ st.markdown(
         box-shadow: 0 0 30px rgba(0,229,255,0.06);
         backdrop-filter: blur(8px);
     }
-
-    /* Chat bubbles */
     .chat-container {padding: 12px 12px 2px 12px;}
     .msg {
         padding: 12px 14px;
@@ -64,8 +56,6 @@ st.markdown(
     .user {background: rgba(0,229,255,0.08); border: 1px solid rgba(0,229,255,0.35);} 
     .bot  {background: rgba(255,0,200,0.08); border: 1px solid rgba(255,0,200,0.35);} 
     .msg small {display: block; opacity: 0.6; margin-top: 6px; font-size: 12px;}
-
-    /* Inputs */
     .neon-input textarea, .neon-input input {
         background: rgba(8,14,22,0.8) !important;
         color: #E2F1FF !important;
@@ -81,15 +71,11 @@ st.markdown(
         border-radius: 10px !important;
         box-shadow: 0 0 16px rgba(0,229,255,0.3), 0 0 26px rgba(255,0,212,0.2);
     }
-
-    /* Sidebar */
     section[data-testid="stSidebar"] > div {background: transparent;}
     .sidebar-card {
         padding: 14px;
         margin: 6px 10px 16px 10px;
     }
-
-    /* Footer */
     .footer {
         text-align: center; color: #7FB9FF; opacity: 0.7; font-size: 12px; margin-top: 14px;
     }
@@ -106,12 +92,13 @@ def load_model():
     tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
+    quantization_config = BitsAndBytesConfig(load_in_4bit=True)
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_DIR,
         torch_dtype="auto",
         device_map="auto",
+        quantization_config=quantization_config,
     )
-    # Precompute END token id once
     try:
         end_id = tokenizer.encode('<|END|>')[-1]
     except Exception:
@@ -124,7 +111,7 @@ def format_prompt(question: str) -> str:
 def generate_answer(question: str, temperature: float, top_p: float, top_k: int, max_new_tokens: int, do_sample: bool) -> str:
     tokenizer, model, end_id = load_model()
     prompt = format_prompt(question)
-    inputs = tokenizer(prompt, return_tensors="pt").to("cuda")  # Explicitly move to CUDA
+    inputs = tokenizer(prompt, return_tensors="pt").to("cuda" if torch.cuda.is_available() else "cpu")
     with torch.inference_mode():
         outputs = model.generate(
             **inputs,
@@ -137,10 +124,8 @@ def generate_answer(question: str, temperature: float, top_p: float, top_k: int,
             top_k=top_k,
         )
     text = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    # Extract model answer after "Answer:"
     start = text.find("Answer:")
     answer = text[start + len("Answer:") :].strip() if start != -1 else text.strip()
-    # Stop at custom END token text if present in decoded output
     cut = answer.find("<|END|>")
     if cut != -1:
         answer = answer[:cut].strip()
@@ -151,14 +136,12 @@ with st.sidebar:
     st.markdown("<div class='neon-title'>NEONBANK</div>", unsafe_allow_html=True)
     st.markdown("<div class='neon-subtitle'>AI Loan Officer</div>", unsafe_allow_html=True)
     st.markdown("<div class='glass sidebar-card'>\n<span class='pill'>Model</span><br/>Llama 3.2 1B (Fine-tuned)\n</div>", unsafe_allow_html=True)
-
     st.markdown("<div class='glass sidebar-card'>Generation Settings</div>", unsafe_allow_html=True)
     temperature = st.slider("Temperature", 0.0, 1.5, 0.7, 0.05)
     top_p = st.slider("Top-p", 0.1, 1.0, 0.9, 0.05)
     top_k = st.slider("Top-k", 1, 100, 50, 1)
     max_new_tokens = st.slider("Max new tokens", 32, 512, 192, 16)
     do_sample = st.checkbox("Enable sampling", True)
-
     st.markdown("<div class='glass sidebar-card'>Utilities</div>", unsafe_allow_html=True)
     if st.button("Clear chat history"):
         st.session_state.pop("chat", None)
@@ -169,7 +152,7 @@ st.markdown("<div class='neon-subtitle'>Ask anything about loan eligibility, doc
 
 # Init chat history
 if "chat" not in st.session_state:
-    st.session_state.chat = []  # list of {role, content}
+    st.session_state.chat = []
 
 # Chat display
 chat_panel = st.container()
