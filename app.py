@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO, filename="logs/chatbot_log.txt",
 # File paths
 BASE_MODEL = "meta-llama/Llama-3.2-1B-Instruct"
 LORA_DIR = os.path.join("output", "fine_tuned_model")
-LORA_HF = "faizan1343/loan-assistant-lora"  # Replace with your Hugging Face LoRA ID
+LORA_HF = "faizan2321/loan-assistant-lora"  
 MODEL_PATH = "rag_catboost/best_model.pkl"
 TRAIN_PATH = "rag_catboost/processed/train_processed.csv"
 OUTPUT_PATH = "rag_catboost/chatbot_output.txt"
@@ -32,7 +32,6 @@ except Exception as e:
     logging.error(f"Error loading CatBoost model: {e}")
     st.stop()
 
-# Load training data (optional, for context or validation)
 try:
     train_df = pd.read_csv(TRAIN_PATH)
     logging.info("Training data loaded.")
@@ -108,7 +107,7 @@ def predict_loan_approval(prompt: str) -> str:
     }
     try:
         if not all(re.search(pattern, prompt, re.IGNORECASE) for pattern in prediction_patterns.values()):
-            return None  # Not a prediction request
+            return None  
         input_dict = {}
         for key, pattern in prediction_patterns.items():
             match = re.search(pattern, prompt, re.IGNORECASE)
