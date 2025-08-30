@@ -22,8 +22,15 @@ MODEL_PATH = "rag_catboost/best_model.pkl"
 TRAIN_PATH = "rag_catboost/processed/train_processed.csv"
 OUTPUT_PATH = "rag_catboost/chatbot_output.txt"
 
-# Load CatBoost model
+# Load CatBoost model from Hugging Face or local
 try:
+    if not os.path.exists(MODEL_PATH):
+        url = "https://huggingface.co/faizan2321/loan-assistant-lora/resolve/main/best_model.pkl"
+        r = requests.get(url)
+        os.makedirs("rag_catboost", exist_ok=True)
+        with open(MODEL_PATH, "wb") as f:
+            f.write(r.content)
+        logging.info("Downloaded CatBoost model from Hugging Face.")
     with open(MODEL_PATH, "rb") as f:
         catboost_model = pickle.load(f)
     logging.info("CatBoost model loaded.")
